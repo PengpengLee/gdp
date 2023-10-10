@@ -1,0 +1,29 @@
+# CI: 持续集成配置(continuous integration)
+Global:
+    version: 1.0
+    group_email: peng.lee577@gmail.com   # <--配置团队邮箱地址，用于接收xx.latest软件版本升级通知邮件
+
+Default:
+    profile : [build]
+
+Profiles:
+    - profile:
+      name : build
+      mode: AGENT
+      environment:
+        image: DECK_CENTOS6U3_K3
+        resourceType: MEDIUM
+        tools:   # <------ 配置软件版本信息
+          # 配置软件名称及其对应版本，支持指定具体版本（例如1.17、1.18等）or
+          #  1.19.latest（表示使用当前构建系统支持的对应版本软件的最新小版本）
+          - go: 1.19.latest             
+      build:
+        command: make -f Makefile
+        cache:
+          enable: true
+          trimeThresholdSize: 3
+          paths:
+            - packages
+            - cache
+#      artifacts:
+#        release: true
